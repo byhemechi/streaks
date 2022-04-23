@@ -215,7 +215,7 @@ const App = () => {
   ) : (
     <main className="max-w-screen-lg w-full mx-auto p-12">
       <h1 className="text-3xl pb-5 mb-5 font-semibold">
-        Longest Streaks where cut{" "}
+        Longest streak of cuts{" "}
         <select
           className="bg-transparent p-2 px-3 border-dashed border-b-gray-400 focus:outline-none"
           value={operation}
