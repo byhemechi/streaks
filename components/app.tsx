@@ -111,16 +111,20 @@ interface Play {
 
 const App = () => {
   const [handleState, setHandleState] = useState<PermissionState>();
-  const [playData, setPlayData] = useState<Play[]>();
+  const [playData, setPlayData] = useState<Play[]>([]);
   const [targetScore, setTargetScore] = useState<number>(115);
   const [operation, setoperation] = useState<"eq" | "gt" | "lt">("eq");
 
   useEffect(() => {
-    if (!playData)
+    console.log("sdfsdf");
+    if (playData.length == 0)
       getIDBDirectoryHandle().then(async (idbHandle) => {
-        setHandleState(await idbHandle.queryPermission());
+        const state = await idbHandle?.queryPermission();
+        console.log(state);
+        setHandleState(state);
+        if (state == "granted") getPlayData(idbHandle);
       });
-  }, [playData]);
+  }, [playData, handleState]);
 
   const getIDBDirectoryHandle = async () => {
     const idbHandle = await get("directoryHandle");
@@ -196,7 +200,7 @@ const App = () => {
       .slice(0, 30);
   };
 
-  return !playData ? (
+  return handleState !== "granted" && playData.length == 0 ? (
     <div className="flex-1 flex p-12 md:items-center justify-center flex-col">
       <article className="prose prose-xl dark:prose-invert w-full">
         <h2>One quick first step</h2>
