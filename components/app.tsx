@@ -203,7 +203,7 @@ const App = () => {
     </div>
   ) : (
     <main className="max-w-screen-lg w-full mx-auto p-12">
-      <h1 className="text-3xl pb-5 mb-5 font-semibold border-b-2">
+      <h1 className="text-3xl pb-5 mb-5 font-semibold">
         30 Longest Streaks of{" "}
         <input
           type="number"
@@ -211,11 +211,11 @@ const App = () => {
           max={115}
           value={targetScore}
           onChange={(e) => setTargetScore(e.target.valueAsNumber)}
-          className="p-2 border-b-2 border-dashed border-b-gray-400 focus:outline-none focus:border-solid"
+          className="p-2 border-b-2 bg-transparent border-dashed border-b-gray-400 focus:outline-none focus:border-solid"
           style={{ font: "inherit" }}
         />
       </h1>
-      <div className="prose prose-xl max-w-none">
+      <div className="prose prose-xl max-w-none dark:prose-invert">
         <table>
           <thead>
             <th>#</th>
