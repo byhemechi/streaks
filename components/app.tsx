@@ -159,9 +159,9 @@ const App = () => {
         ({ count, maxCount }, i) => {
           return matches(i)
             ? { count: count + 1, maxCount: Math.max(maxCount, count) }
-            : { count: 0, maxCount };
+            : { count: 1, maxCount };
         },
-        { count: 0, maxCount: 0 }
+        { count: 1, maxCount: 1 }
       );
 
       playCounts.push({
