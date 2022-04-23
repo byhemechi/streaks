@@ -217,7 +217,7 @@ const App = () => {
       <h1 className="text-3xl pb-5 mb-5 font-semibold">
         Longest Streaks where cut{" "}
         <select
-          className="bg-transparent p-2 px-3 border-dashed border-b-gray-400"
+          className="bg-transparent p-2 px-3 border-dashed border-b-gray-400 focus:outline-none"
           value={operation}
           // @ts-expect-error
           onChange={(e) => setoperation(e.target.value)}
