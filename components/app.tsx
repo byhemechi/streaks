@@ -116,11 +116,9 @@ const App = () => {
   const [operation, setoperation] = useState<"eq" | "gt" | "lt">("eq");
 
   useEffect(() => {
-    console.log("sdfsdf");
     if (playData.length == 0)
       getIDBDirectoryHandle().then(async (idbHandle) => {
         const state = await idbHandle?.queryPermission();
-        console.log(state);
         setHandleState(state);
         if (state == "granted") getPlayData(idbHandle);
       });
@@ -290,12 +288,14 @@ const App = () => {
       <div className="prose prose-xl max-w-none dark:prose-invert prose-neutral">
         <table>
           <thead>
-            <th>#</th>
-            <th>Difficulty</th>
-            <th>Song</th>
-            <th>Artist</th>
-            <th>Mapper</th>
-            <th>Streak</th>
+            <tr>
+              <th>#</th>
+              <th>Difficulty</th>
+              <th>Song</th>
+              <th>Artist</th>
+              <th>Mapper</th>
+              <th>Streak</th>
+            </tr>
           </thead>
           <tbody>
             {calculateStreaks(targetScore, operation).map(
