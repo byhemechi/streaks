@@ -167,7 +167,7 @@ const App = () => {
 
   return !playData ? (
     <div className="flex-1 flex items-center justify-center flex-col">
-      <article className="prose prose-xl">
+      <article className="prose prose-xl dark:prose-invert">
         <h2>One quick first step </h2>
         <p>
           Chrome doesn&apos;t allow websites to read data from the appdata
@@ -193,7 +193,7 @@ const App = () => {
         </p>
         <p>
           <button
-            className="p-2 px-3 bg-gray-100 rounded-lg"
+            className="p-2 px-3 bg-gray-100 rounded-lg dark:bg-gray-800"
             onClick={() => getPlayData()}
           >
             Open Directory Picker
