@@ -159,7 +159,10 @@ const App = () => {
       });
     }
 
-    return playCounts.sort((a, b) => b.streak - a.streak).slice(0, 30);
+    return playCounts
+      .sort((a, b) => b.streak - a.streak)
+      .filter(({ streak }) => streak > 1)
+      .slice(0, 30);
   };
 
   return !playData ? (
