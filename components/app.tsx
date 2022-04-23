@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { get, set } from "idb-keyval";
 
 interface Play {
   songDataType: number;
@@ -109,13 +110,32 @@ interface Play {
 }
 
 const App = () => {
+  const [handleState, setHandleState] = useState<PermissionState>();
   const [playData, setPlayData] = useState<Play[]>();
   const [targetScore, setTargetScore] = useState<number>(115);
   const [operation, setoperation] = useState<"eq" | "gt" | "lt">("eq");
 
-  const getPlayData = async () => {
+  useEffect(() => {
+    if (!playData)
+      getIDBDirectoryHandle().then(async (idbHandle) => {
+        setHandleState(await idbHandle.queryPermission());
+      });
+  }, [playData]);
+
+  const getIDBDirectoryHandle = async () => {
+    const idbHandle = await get("directoryHandle");
+    if (!(idbHandle instanceof FileSystemDirectoryHandle)) return;
+    return idbHandle;
+  };
+
+  const createDirectoryHandle = async () => {
+    const handle = await showDirectoryPicker();
+    set("directoryHandle", handle);
+    return handle;
+  };
+
+  const getPlayData = async (handle: FileSystemDirectoryHandle) => {
     try {
-      const handle = await window.showDirectoryPicker({});
       const plays = [];
 
       for await (const [name, file] of handle.entries()) {
@@ -132,7 +152,7 @@ const App = () => {
 
       setPlayData(plays);
     } catch (err) {
-      console.info(err);
+      console.error(err);
     }
   };
 
@@ -178,36 +198,51 @@ const App = () => {
 
   return !playData ? (
     <div className="flex-1 flex p-12 md:items-center justify-center flex-col">
-      <article className="prose prose-xl dark:prose-invert">
-        <h2>One quick first step </h2>
-        <p>
-          Chrome doesn&apos;t allow websites to read data from the appdata
-          directory, so we need to make a symbolic link to it
-        </p>
-        <p>You only need to do this once.</p>
-        <p>
-          <strong>Copy-Paste the command below into PowerShell</strong>
-        </p>
-        <p>
-          This will create a symbolic link from the Beat Savior app data to your
-          documents folder.
-        </p>
-        <pre>
-          <code>
-            {`New-Item -ItemType Junction -Path ([environment]::getfolderpath("mydocuments") + "\\Beat Savior Data") -Target "$env:AppData\\Beat Savior Data"`}
-          </code>
-        </pre>
+      <article className="prose prose-xl dark:prose-invert w-full">
+        <h2>One quick first step</h2>
+        {handleState !== "prompt" ? (
+          <>
+            <p>
+              Chrome doesn&apos;t allow websites to read data from the appdata
+              directory, so we need to make a symbolic link to it
+            </p>
+            <p>You only need to do this once.</p>
+            <p>
+              <strong>Copy-Paste the command below into PowerShell</strong>
+            </p>
+            <p>
+              This will create a symbolic link from the Beat Savior app data to
+              your documents folder.
+            </p>
+            <pre>
+              <code>
+                {`New-Item -ItemType Junction -Path ([environment]::getfolderpath("mydocuments") + "\\Beat Savior Data") -Target "$env:AppData\\Beat Savior Data"`}
+              </code>
+            </pre>
 
-        <p>
-          Once that&apos;s done, click the button below and open the{" "}
-          <code>Documents/Beat Savior Data</code> folder
-        </p>
+            <p>
+              Once that&apos;s done, click the button below and open the{" "}
+              <code>Documents/Beat Savior Data</code> folder
+            </p>
+          </>
+        ) : (
+          <p>Security policy requires user input to read from storage.</p>
+        )}
         <p>
           <button
             className="p-2 px-3 bg-neutral-100 rounded-lg dark:bg-neutral-800"
-            onClick={() => getPlayData()}
+            onClick={async () => {
+              let handle: FileSystemDirectoryHandle;
+              if (handleState == "prompt") {
+                handle = await getIDBDirectoryHandle();
+                await handle.requestPermission();
+              } else {
+                handle = await createDirectoryHandle();
+              }
+              return getPlayData(handle);
+            }}
           >
-            Open Directory Picker
+            {handleState == "prompt" ? "Load scores" : "Open Directory Picker"}
           </button>
         </p>
       </article>
