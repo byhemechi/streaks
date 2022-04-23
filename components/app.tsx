@@ -212,7 +212,7 @@ const App = () => {
           style={{ font: "inherit" }}
         />
       </h1>
-      <div className="prose max-w-none">
+      <div className="prose prose-xl max-w-none">
         <table>
           <thead>
             <th>#</th>
