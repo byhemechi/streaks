@@ -7,3 +7,7 @@ body,
 #__next {
   @apply w-full min-h-screen m-0 flex bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-300 flex-col;
 }
+
+button {
+  @apply p-2 px-4 bg-neutral-100 rounded-lg dark:bg-neutral-800;
+}

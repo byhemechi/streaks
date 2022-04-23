@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { get, set } from "idb-keyval";
+import { get, set, del } from "idb-keyval";
 
 interface Play {
   songDataType: number;
@@ -228,9 +228,9 @@ const App = () => {
         ) : (
           <p>Security policy requires user input to read from storage.</p>
         )}
-        <p>
+        <p className="flex gap-4">
           <button
-            className="p-2 px-3 bg-neutral-100 rounded-lg dark:bg-neutral-800"
+            className="bg-blue-600 text-white shadow-blue-600/25 shadow-lg"
             onClick={async () => {
               let handle: FileSystemDirectoryHandle;
               if (handleState == "prompt") {
@@ -244,6 +244,18 @@ const App = () => {
           >
             {handleState == "prompt" ? "Load scores" : "Open Directory Picker"}
           </button>
+          {handleState ? (
+            <button
+              onClick={async () => {
+                await del("directoryHandle");
+                setHandleState(undefined);
+              }}
+            >
+              I selected the wrong folder
+            </button>
+          ) : (
+            ""
+          )}
         </p>
       </article>
     </div>
