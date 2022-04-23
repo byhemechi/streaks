@@ -219,6 +219,7 @@ const App = () => {
         <table>
           <thead>
             <th>#</th>
+            <th>Difficulty</th>
             <th>Song</th>
             <th>Artist</th>
             <th>Mapper</th>
@@ -229,6 +230,15 @@ const App = () => {
               return (
                 <tr key={n}>
                   <td>{n + 1}</td>
+                  <td>
+                    {{
+                      expertplus: "Expert+",
+                      expert: "Expert",
+                      hard: "Hard",
+                      normal: "Normal",
+                      easy: "Easy",
+                    }[play.songDifficulty] ?? play.songDifficulty}
+                  </td>
                   <td>{play.songName}</td>
                   <td>{play.songArtist}</td>
                   <td>{play.songMapper}</td>
