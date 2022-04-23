@@ -9,7 +9,7 @@ function StreaksApp({ Component, pageProps }) {
       <Head>
         <title>streaks</title>
       </Head>
-      <header className="bg-black/10 dark:bg-black/50 backdrop-blur-lg text-xl font-semibold sticky top-0">
+      <header className="bg-neutral-100 dark:bg-neutral-800 text-xl font-semibold">
         <div className="max-w-screen-lg mx-auto p-4 px-10 flex items-center gap-4">
           <div className="flex justify-center items-center gap-2 w-12 h-12 rounded-md bg-gradient-to-br from-orange-600 to-purple-600 text-white p-1">
             <svg
