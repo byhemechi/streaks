@@ -111,6 +111,7 @@ interface Play {
 const App = () => {
   const [playData, setPlayData] = useState<Play[]>();
   const [targetScore, setTargetScore] = useState<number>(115);
+  const [operation, setoperation] = useState<"eq" | "gt" | "lt">("eq");
 
   const getPlayData = async () => {
     try {
@@ -135,8 +136,18 @@ const App = () => {
     }
   };
 
-  const calculateStreaks = (targetScore: number) => {
+  const calculateStreaks = (
+    targetScore: number,
+    operation: "eq" | "gt" | "lt"
+  ) => {
     const playCounts: { play: Play; streak: number }[] = [];
+
+    const matches = (i: number) => {
+      if (operation == "gt") return i >= targetScore;
+      if (operation == "lt") return i <= targetScore;
+      return i === targetScore;
+    };
+
     for (const play of playData) {
       const noteScores = play.deepTrackers?.noteTracker?.notes?.map(
         (t) => t.score[0] + t.score[1] + t.score[2]
@@ -146,7 +157,7 @@ const App = () => {
 
       const { maxCount: streak } = noteScores.reduce(
         ({ count, maxCount }, i) => {
-          return i === targetScore
+          return matches(i)
             ? { count: count + 1, maxCount: Math.max(maxCount, count) }
             : { count: 0, maxCount };
         },
@@ -204,7 +215,17 @@ const App = () => {
   ) : (
     <main className="max-w-screen-lg w-full mx-auto p-12">
       <h1 className="text-3xl pb-5 mb-5 font-semibold">
-        30 Longest Streaks of{" "}
+        Longest Streaks where cut{" "}
+        <select
+          className="bg-transparent p-2 px-3 border-dashed border-b-gray-400"
+          value={operation}
+          // @ts-expect-error
+          onChange={(e) => setoperation(e.target.value)}
+        >
+          <option value="lt">&le;</option>
+          <option value="gt">&ge;</option>
+          <option value="eq">=</option>
+        </select>{" "}
         <input
           type="number"
           min={0}
@@ -226,26 +247,28 @@ const App = () => {
             <th>Streak</th>
           </thead>
           <tbody>
-            {calculateStreaks(targetScore).map(({ play, streak }, n) => {
-              return (
-                <tr key={n}>
-                  <td>{n + 1}</td>
-                  <td>
-                    {{
-                      expertplus: "Expert+",
-                      expert: "Expert",
-                      hard: "Hard",
-                      normal: "Normal",
-                      easy: "Easy",
-                    }[play.songDifficulty] ?? play.songDifficulty}
-                  </td>
-                  <td>{play.songName}</td>
-                  <td>{play.songArtist}</td>
-                  <td>{play.songMapper}</td>
-                  <td>{streak}</td>
-                </tr>
-              );
-            })}
+            {calculateStreaks(targetScore, operation).map(
+              ({ play, streak }, n) => {
+                return (
+                  <tr key={n}>
+                    <td>{n + 1}</td>
+                    <td>
+                      {{
+                        expertplus: "Expert+",
+                        expert: "Expert",
+                        hard: "Hard",
+                        normal: "Normal",
+                        easy: "Easy",
+                      }[play.songDifficulty] ?? play.songDifficulty}
+                    </td>
+                    <td>{play.songName}</td>
+                    <td>{play.songArtist}</td>
+                    <td>{play.songMapper}</td>
+                    <td>{streak}</td>
+                  </tr>
+                );
+              }
+            )}
           </tbody>
         </table>
       </div>
