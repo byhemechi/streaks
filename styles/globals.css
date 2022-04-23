@@ -5,5 +5,5 @@
 html,
 body,
 #__next {
-  @apply w-full h-full m-0 flex bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-300;
+  @apply w-full h-full m-0 flex bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-300;
 }

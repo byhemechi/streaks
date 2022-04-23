@@ -204,7 +204,7 @@ const App = () => {
         </p>
         <p>
           <button
-            className="p-2 px-3 bg-gray-100 rounded-lg dark:bg-gray-800"
+            className="p-2 px-3 bg-neutral-100 rounded-lg dark:bg-neutral-800"
             onClick={() => getPlayData()}
           >
             Open Directory Picker
@@ -217,7 +217,7 @@ const App = () => {
       <h1 className="text-3xl pb-5 mb-5 font-semibold">
         Longest streak of cuts{" "}
         <select
-          className="bg-transparent p-2 px-3 border-dashed border-b-gray-400 focus:outline-none"
+          className="bg-transparent p-2 px-3 border-dashed border-b-neutral-400 focus:outline-none"
           value={operation}
           // @ts-expect-error
           onChange={(e) => setoperation(e.target.value)}
@@ -232,11 +232,11 @@ const App = () => {
           max={115}
           value={targetScore}
           onChange={(e) => setTargetScore(e.target.valueAsNumber)}
-          className="p-2 border-b-2 bg-transparent border-dashed border-b-gray-400 focus:outline-none focus:border-solid"
+          className="p-2 border-b-2 bg-transparent border-dashed border-b-neutral-400 focus:outline-none focus:border-solid"
           style={{ font: "inherit" }}
         />
       </h1>
-      <div className="prose prose-xl max-w-none dark:prose-invert">
+      <div className="prose prose-xl max-w-none dark:prose-invert prose-neutral">
         <table>
           <thead>
             <th>#</th>
