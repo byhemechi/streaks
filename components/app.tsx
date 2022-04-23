@@ -177,7 +177,7 @@ const App = () => {
   };
 
   return !playData ? (
-    <div className="flex-1 flex items-center justify-center flex-col">
+    <div className="flex-1 flex p-12 md:items-center justify-center flex-col">
       <article className="prose prose-xl dark:prose-invert">
         <h2>One quick first step </h2>
         <p>
