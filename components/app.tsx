@@ -84,29 +84,31 @@ interface Play {
   };
   deepTrackers: {
     noteTracker: {
-      notes: {
-        noteType: number;
-        noteDirection: number;
-        index: number;
-        id: number;
-        time: number;
-        cutType: number;
-        multiplier: number;
-        score: number[];
-        noteCenter: number[];
-        noteRotation: number[];
-        timeDeviation: number;
-        speed: number;
-        preswing: number;
-        postswing: number;
-        distanceToCenter: number;
-        cutPoint: number[];
-        saberDir: number[];
-        cutNormal: number[];
-        timeDependence: number;
-      }[];
+      notes: Note[];
     };
   };
+}
+
+interface Note {
+  noteType: number;
+  noteDirection: number;
+  index: number;
+  id: number;
+  time: number;
+  cutType: number;
+  multiplier: number;
+  score: [number, number, number];
+  noteCenter: number[];
+  noteRotation: number[];
+  timeDeviation: number;
+  speed: number;
+  preswing: number;
+  postswing: number;
+  distanceToCenter: number;
+  cutPoint: number[];
+  saberDir: number[];
+  cutNormal: number[];
+  timeDependence: number;
 }
 
 const App = () => {
@@ -164,21 +166,21 @@ const App = () => {
   ) => {
     const playCounts: { play: Play; streak: number }[] = [];
 
-    const matches = (i: number) => {
-      if (operation == "gt") return i >= targetScore;
-      if (operation == "lt") return i <= targetScore;
-      return i === targetScore;
+    const matches = (note: Note) => {
+      const score = note.score.reduce((prev, next) => prev + next, 0);
+      if (operation == "gt") return score >= targetScore;
+      if (operation == "lt") return score <= targetScore;
+      return score === targetScore;
     };
 
     for (const play of playData) {
-      const noteScores = play.deepTrackers?.noteTracker?.notes?.map(
-        (t) => t.score[0] + t.score[1] + t.score[2]
-      );
+      const noteScores = play.deepTrackers?.noteTracker?.notes;
 
       if (!noteScores) continue;
 
       const { maxCount: streak } = noteScores.reduce(
         ({ count, maxCount }, i) => {
+          if (i.cutType !== 0) return { count: 0, maxCount };
           return matches(i)
             ? { count: count + 1, maxCount: Math.max(maxCount, count) }
             : { count: 1, maxCount };
